@@ -1,3 +1,4 @@
+/*
 package com.example.test_micro.graphql;
 import com.example.test_micro.entity.Car;
 import com.example.test_micro.service.CarService;
@@ -16,7 +17,6 @@ public class CarResolver {
     public CarResolver(CarService carService) {
         this.carService = carService;
     }
-
 
     @MutationMapping
     public Car saveCar(@Argument String brand, @Argument String model, @Argument int year) {
@@ -50,6 +50,81 @@ public class CarResolver {
 
         }
         return null;
+    }
+
+    @MutationMapping
+    public String deleteCar(@Argument Long id) {
+        if (carService.getCarById(id).isPresent()) {
+            carService.deleteCar(id);
+            return "Car deleted successfully";
+        } else {
+            return "Car not found";
+        }
+    }
+}
+*/
+
+package com.example.test_micro.graphql;
+
+import com.example.test_micro.entity.Car;
+import com.example.test_micro.service.CarService;
+import com.example.test_micro.service.CloudinaryService;
+import graphql.schema.DataFetchingEnvironment;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+@Controller
+public class CarResolver {
+
+    private final CarService carService;
+    private final CloudinaryService cloudinaryService;
+
+    public CarResolver(CarService carService, CloudinaryService cloudinaryService) {
+        this.carService = carService;
+        this.cloudinaryService = cloudinaryService;
+    }
+
+    @MutationMapping
+    public Car saveCar(@Argument String brand, @Argument String model, @Argument int year, @Argument String image) {
+        Car car = new Car();
+        car.setBrand(brand);
+        car.setModel(model);
+        car.setYear(year);
+        car.setImage(image);
+
+        return carService.saveCar(car);
+    }
+
+    @MutationMapping
+    public Car editCar(@Argument Long id, @Argument String brand, @Argument String model, @Argument Integer year, @Argument String image) {
+        Optional<Car> optionalCar = carService.getCarById(id);
+        if (optionalCar.isPresent()) {
+            Car car = optionalCar.get();
+            if (brand != null) car.setBrand(brand);
+            if (model != null) car.setModel(model);
+            if (year != null) car.setYear(year);
+            if (image != null) car.setImage(image);
+
+            return carService.updateCar(car);
+        }
+        return null;
+    }
+
+    @QueryMapping
+    public List<Car> getAllCars() {
+        return carService.getAllCars();
+    }
+
+    @QueryMapping
+    public Car getCarById(@Argument Long id) {
+        return carService.getCarById(id).orElse(null);
     }
 
     @MutationMapping

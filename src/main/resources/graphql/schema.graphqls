@@ -3,6 +3,7 @@ type Car {
     brand: String!
     model: String!
     year: Int!
+    image: String!
 }
 
 type Query {
@@ -11,7 +12,7 @@ type Query {
 }
 
 type Mutation {
-    saveCar(brand: String!, model: String!, year: Int!): Car!
-    editCar(id: ID!, brand: String, model: String, year: Int): Car
+    saveCar(brand: String!, model: String!, year: Int!, image: String): Car!
+    editCar(id: ID!, brand: String, model: String, year: Int, image: String): Car
     deleteCar(id: ID!): String!
 }
