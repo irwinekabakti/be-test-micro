@@ -8,12 +8,11 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String brand;
     private String model;
     private int year;
+    private String image;
 
-    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -44,5 +43,12 @@ public class Car {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public String getImage() {
+        return image;
+    }
+    public void setImage (String image) {
+        this.image = image;
     }
 }
