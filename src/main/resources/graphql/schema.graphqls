@@ -1,0 +1,17 @@
+type Car {
+    id: ID!
+    brand: String!
+    model: String!
+    year: Int!
+}
+
+type Query {
+    getAllCars: [Car]!
+    getCarById(id: ID!): Car
+}
+
+type Mutation {
+    saveCar(brand: String!, model: String!, year: Int!): Car!
+    editCar(id: ID!, brand: String, model: String, year: Int): Car
+    deleteCar(id: ID!): String!
+}
